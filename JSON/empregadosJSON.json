@@ -1,0 +1,130 @@
+{
+	"RegistroEmpregados":{
+		"idRegistro" : 1,
+		"numFolha": 1,
+		"numLivro": null,
+		"data" : null,
+		"cidade" : null,
+		"assinaturaEmpregado": null,
+		"observacao": null,
+		"dataDemissao": null,
+		"docsRecebidos": null
+	},
+	"CaracFisicas":{
+		"idCF": 1,
+		"idRegistro": 1,
+		"cor": null,
+		"cabelo": null,
+		"olhos": null,
+		"altura": null,
+		"peso": null,
+		"sinais": null
+	},
+	"Contrato":{
+		"idContrato": 1,
+		"idRegistro": 1,
+		"nomeEmpregado": null,
+		"numCtps": null,
+		"serieCtps": null,
+		"ctpsRural": null,
+		"serieCtpsRural": null,
+		"Cpf": null,
+		"tituloEleitor": null,
+		"zona": null,
+		"rg": null,
+		"dataAdmissao": null,
+		"cargo": null,
+		"salario": null,
+		"salarioExtenso": null,
+		"periodoSalarial": null,
+		"horaEntrada": null,
+		"horaSaida": null,
+		"horaIntervalo": null,
+	},
+	"SituacaoFGTS":{
+		"idSFGTS": ,
+		"idRegistro": ,
+		"optante": ,
+		"dataOpcao": ,
+		"dataRetratacao": ,
+		"bancoDepositario": ,
+		"nacionalidade": ,
+		"nomePai": ,
+		"nomeMae": ,
+		"cidadeOrigem": ,
+		"estado": ,
+		"dataNascimento": ,
+		"estadoCivil": ,
+		"nomeConjuge": ,
+		"grauInstrucao": ,
+		"residencia": ,
+		"cnh": ,
+		"numCM": ,
+		"serieCM": ,
+		"categCM": 
+	},
+	"Estrangeiros":{
+		"idEstrangeiro": ,
+		"idRegistro": ,
+		"numCarteira": ,
+		"numRG": ,
+		"conjugeBrasileiro": ,
+		"nomeConjuge": ,
+		"filhosBrasileiros": ,
+		"qtsFilhos": ,
+		"dataChegada": ,
+		"naturalizado": ,
+		"numDecreto": 
+	},
+	"PIS":{
+		"idPIS": ,
+		"idRegistro": ,
+		"dataCadastro": ,
+		"numCadastro": ,
+		"depBanco": ,
+		"endereco": ,
+		"codBanco": ,
+		"codAgencia": ,
+		"enderecoAgencia": ,
+		"observacao": 
+	},
+	"Beneficiarios":{
+		"idBeneficiario": ,
+		"idRegistro": 
+	},
+	"Salario":{
+		"idSalario": ,
+		"idRegistro": ,
+		"data": ,
+		"salario": ,
+		"frequencia": 
+	},
+	"Cargo":{
+		"idCargo": ,
+		"idRegistro": ,
+		"data": ,
+		"cargo": 
+	},
+	"ContribSindical":{
+		"idContrib": ,
+		"idRegistro": ,
+		"numGuia": ,
+		"data": ,
+		"sindicato": 		
+	},
+	"ADP":{
+		"idADP": ,
+		"idRegistro": ,
+		"descricao": ,
+		"data": ,
+		"dataAlta": 
+	},
+	"Ferias":{
+		"idFerias": ,
+		"idRegistro": ,
+		"dataIncio": ,
+		"dataTermino": ,
+		"inicioPeriodo": ,
+		"terminoPeriodo":
+	}
+}
