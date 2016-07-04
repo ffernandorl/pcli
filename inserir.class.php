@@ -1,5 +1,5 @@
 <?php
-class Inserir{
+class Empregado{
 	//Função para inserir todas as 12 tabelas do empregado
 	public function InserirEmpregado($jsonEmpregado, $database){
 		$insertEmpregado = json_decode($jsonEmpregado); //Decodificando o JSON

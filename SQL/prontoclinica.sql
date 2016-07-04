@@ -17,14 +17,15 @@ CREATE TABLE Empresa (
 	PRIMARY KEY (cnpj)
 ) ENGINE=InnoDB;
 
-CREATE TABLE TermoDeAbertura(
+CREATE TABLE Livro(
 	numLivro int(11) NOT NULL,
-	cnpj varchar(15) NOT NULL,
+	cnpj varchar(15),
 	numFolhas int(11),
 	drtLocal varchar(50),
 	livroAnterior int(11),
 	data date,
 	assinaturaEmpregador varchar(50),
+	status char(1),
 	PRIMARY KEY (numLivro),
 	FOREIGN KEY (cnpj) REFERENCES Empresa (cnpj)	
 ) ENGINE=InnoDB;
@@ -52,7 +53,7 @@ CREATE TABLE RegistroEmpregado (
 	dataDemissao date,
 	docsRecebidos varchar(140),
 	PRIMARY KEY (idRegistro),
-	FOREIGN KEY (numLivro) REFERENCES TermoDeAbertura (numLivro)
+	FOREIGN KEY (numLivro) REFERENCES Livro (numLivro)
 ) ENGINE=InnoDB;
 
 -- TABELAS DEPENDENTES DO REGISTRO DE EMPREGADO --
