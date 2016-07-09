@@ -1,5 +1,5 @@
 <?php 
-require_once 'inserir.class.php';
+require_once 'empregado.class.php';
 require_once 'livro.class.php';
 require_once 'config.php';
 /*
@@ -23,7 +23,7 @@ $json = '{
 }';
 $livro = new Livro;
 $livro->InserirLivro($json, $database);
-$livro->BuscaLivros($database);
-$livro->AvaliaStatus($database);
+//$livro->BuscaLivros($database);
+//$livro->AvaliaStatus($database);
 
 ?>
