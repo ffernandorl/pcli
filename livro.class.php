@@ -8,10 +8,8 @@ class Livro {
 		}
 		return true;
 	}
-
 	//Validação do  JSON
 	public function ValidaJson($insertLivro, $database){
-		
 		/*$v_err["numLivro"] = $insertLivro["numLivro"] ? null : "err numLivro";*/
 		$v_err["cnpj"] = preg_match("\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}",$insertLivro["cnpj"])? null : "err cnpj";
 		$v_err["numFolhas"] = is_numeric($insertLivro["numFolhas"]) ? null : "err numFolhas";
@@ -23,16 +21,16 @@ class Livro {
 
 		return $v_err;
 	}
-
 	//Função para inserir o Livro
 	public function InserirLivro($jsonLivro, $database){
 		$insertLivro = json_decode($jsonLivro); //Decodificando o JSON
+		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
+		
 		$insertLivro = (array) $insertLivro->Livro; //Criando array para o insert
 		//Validando o JSON
 		$v_err = $this->ValidaJson($insertLivro, $database);
-		foreach ($v_err as $k => $v) {
+		foreach ($v_err as $k => $v)
 			if($v) return $v_err;
-		}
 		//Inserindo no BD
 		$database->pdo->beginTransaction(); //Inicio de uma Transaction
 			$database->insert("Livro",$insertLivro); //Inserindo
@@ -46,7 +44,6 @@ class Livro {
 			return $e;
 		}
 	}
-
 	//Função para selecionar todos os livros existentes no BD
 	public function BuscaLivros($database){
 		$data = $database->select("Livro", "*");
