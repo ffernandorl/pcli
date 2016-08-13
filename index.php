@@ -6,8 +6,8 @@ require_once 'config.php';
 //Empregado
 $json = '{
 	"RegistroEmpregado":{
-		"idRegistro" : 3,
-		"numFolha": 3,
+		"idRegistro" : 4,
+		"numFolha": 4,
 		"numLivro": 1,
 		"data" : null,
 		"cidade" : null,
@@ -17,9 +17,9 @@ $json = '{
 		"docsRecebidos": null
 	},
 	"Contrato":{
-		"idContrato": 3,
-		"idRegistro": 3,
-		"nomeEmpregado": "nome bonito 3",
+		"idContrato": 4,
+		"idRegistro": 4,
+		"nomeEmpregado": "nome bonito",
 		"numCtps": null,
 		"serieCtps": null,
 		"ctpsRural": null,
@@ -39,8 +39,10 @@ $json = '{
 	}
 }';
 $empregado = new Empregado;
-$empregado->InserirEmpregado($json, $database);
-$livro = "1";
-$empregado->BuscaRegistroEmpregado($database, $livro);
+//$empregado->InserirEmpregado($json, $database);
+//$livro = "1";
+//$empregado->BuscaEmpregadoPorLivro($database, $livro);
+$nome = "nome bonito";
+$empregado->BuscaEmpregadoPorNome($database, $nome);
 
 ?>

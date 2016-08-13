@@ -49,7 +49,7 @@ class Empregado{
 			return $e;
 		}
 	}
-	public function BuscaRegistroEmpregado($database, $livro){
+	public function BuscaEmpregadoPorLivro($database, $livro){
 		$data = $database->select(
 			"RegistroEmpregado", 
 			array("[><]Contrato" => "idRegistro"),
@@ -58,6 +58,24 @@ class Empregado{
 			);
 		$data = json_encode($data);
 		return $data;
+	}
+	public function BuscaEmpregadoPorNome($database, $nome){
+		$registros = [];
+		$data = $database->select(
+			"RegistroEmpregado", 
+			array("[><]Contrato" => "idRegistro"),
+			array("idRegistro"),
+			array("Contrato.nomeEmpregado" => $nome)
+			);
+		foreach ($data as $k => $v)
+			array_push($registros, $v["idRegistro"]);
+		foreach ($registros as $k => $v) {
+			$data = $database->select("RegistroEmpregado", "*", ["idRegistro" => $v]);
+			$empregado[$v]["RegistroEmpregado"] = json_encode($data);
+			$data = $database->select("Contrato", "*", ["idRegistro" => $v]);
+			$empregado[$v]["Contrato"] = json_encode($data);
+		}
+		var_dump($empregado);	
 	}
 }
 ?>
