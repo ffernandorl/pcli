@@ -16,14 +16,14 @@ class Empregado{
 		$v_err["Ferias"] = method_exists($insertEmpregado, "Ferias") ? null : "err Ferias";
 		return $v_err;
 	}
-	//Função para inserir todas as 12 tabelas do empregado
+	//Inserção de todas as 12 tabelas do empregado
 	public function InserirEmpregado($jsonEmpregado, $database){
 		$insertEmpregado = json_decode($jsonEmpregado); //Decodificando o JSON
-		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsingContrato
+		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
 		//Validando o JSON
 		/*$v_err = $this->ValidaJson($insertEmpregado);
 		foreach ($v_err as $k => $v)
-			if($v) return $v_err;*/
+			if($v) return json_encode($v_err);*/
 		//Inserindo no BD
 		$database->pdo->beginTransaction(); //Inicio de uma Transaction
 			//Todos os Inserts
@@ -46,9 +46,10 @@ class Empregado{
 			return true;
 		} else {
 			$database->pdo->rollBack();
-			return $e;
+			return json_encode($e);
 		}
 	}
+	//Consulta de um empregado pelo livro
 	public function BuscaEmpregadoPorLivro($database, $livro){
 		$data = $database->select(
 			"RegistroEmpregado", 
@@ -59,6 +60,7 @@ class Empregado{
 		$data = json_encode($data);
 		return $data;
 	}
+	//Consulta de um empregado pelo nome
 	public function BuscaEmpregadoPorNome($database, $nome){
 		$registros = [];
 		$data = $database->select(
@@ -71,11 +73,63 @@ class Empregado{
 			array_push($registros, $v["idRegistro"]);
 		foreach ($registros as $k => $v) {
 			$data = $database->select("RegistroEmpregado", "*", ["idRegistro" => $v]);
-			$empregado[$v]["RegistroEmpregado"] = json_encode($data);
+			$empregado["test".$v]["RegistroEmpregado"] = $data;
 			$data = $database->select("Contrato", "*", ["idRegistro" => $v]);
-			$empregado[$v]["Contrato"] = json_encode($data);
+			$empregado["test".$v]["Contrato"] = $data;
 		}
-		var_dump($empregado);	
+		$empregado = json_encode($empregado);
+		var_dump($empregado);
+	}
+	public function InserirFerias($database, $json){
+		$insertFerias = json_decode($json); //Decodificando o JSON
+		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
+		$database->insert("Ferias", $insertFerias);	
+		$e = $database->error();
+		if($e[1] == null) 
+			return true;
+		else 
+			return json_encode($e);
+	}
+	public function InserirNovoSalario($database, $json){
+		$insertSalario = json_decode($json); //Decodificando o JSON
+		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
+		$database->insert("Salario", $insertSalario);	
+		$e = $database->error();
+		if($e[1] == null) 
+			return true;
+		else 
+			return json_encode($e);
+	}
+	public function InserirNovoCargo($database, $json){
+		$insertCargo = json_decode($json); //Decodificando o JSON
+		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
+		$database->insert("Cargo", $insertCargo);
+		$e = $database->error();
+		if($e[1] == null) 
+			return true;
+		else 
+			return json_encode($e);	
+	}
+	public function InserirContribSindical($database, $json){
+		$insertContribSindical = json_decode($json); //Decodificando o JSON
+		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
+		$database->insert("ContribSindical", $insertContribSindical);
+		$e = $database->error();
+		if($e[1] == null) 
+			return true;
+		else 
+			return json_encode($e);	
+	}
+	public function InserirADP($database, $json){
+		$insertADP = json_decode($json); //Decodificando o JSON
+		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
+		$database->insert("ADP", $insertADP);
+		$e = $database->error();
+		if($e[1] == null) 
+			return true;
+		else 
+			return json_encode($e);	
 	}
 }
+
 ?>

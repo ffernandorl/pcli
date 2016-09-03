@@ -38,11 +38,12 @@ $json = '{
 		"horaIntervalo": null
 	}
 }';
+
 $empregado = new Empregado;
 //$empregado->InserirEmpregado($json, $database);
 //$livro = "1";
 //$empregado->BuscaEmpregadoPorLivro($database, $livro);
 $nome = "nome bonito";
 $empregado->BuscaEmpregadoPorNome($database, $nome);
-
+ 
 ?>
