@@ -4,7 +4,7 @@ require_once 'livro.class.php';
 require_once 'config.php';
 
 //Empregado
-$json = '{
+$json1 = '{
 	"RegistroEmpregado":{
 		"idRegistro" : 4,
 		"numFolha": 4,
@@ -40,10 +40,12 @@ $json = '{
 }';
 
 $empregado = new Empregado;
-//$empregado->InserirEmpregado($json, $database);
-//$livro = "1";
-//$empregado->BuscaEmpregadoPorLivro($database, $livro);
-$nome = "nome bonito";
-$empregado->BuscaEmpregadoPorNome($database, $nome);
- 
+$livro = new Livro;
+$nome = "3";
+$empregado->PesquisaNomeRapida($database, $nome);
+//$empregado->InserirEmpregado($json1, $database);
+//$nome = "nome bonito";
+//$empregado->BuscaEmpregadoPorNome($database, $nome);
+//$livro->RelacaoEmpregPorLivro($database);
+
 ?>

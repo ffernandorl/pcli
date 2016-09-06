@@ -58,7 +58,7 @@ class Empregado{
 			array("RegistroEmpregado.numLivro" => $livro)
 			);
 		$data = json_encode($data);
-		return $data;
+		var_dump($data);
 	}
 	//Consulta de um empregado pelo nome
 	public function BuscaEmpregadoPorNome($database, $nome){
@@ -73,13 +73,24 @@ class Empregado{
 			array_push($registros, $v["idRegistro"]);
 		foreach ($registros as $k => $v) {
 			$data = $database->select("RegistroEmpregado", "*", ["idRegistro" => $v]);
-			$empregado["test".$v]["RegistroEmpregado"] = $data;
+			$empregado[$v]["RegistroEmpregado"] = $data;
 			$data = $database->select("Contrato", "*", ["idRegistro" => $v]);
-			$empregado["test".$v]["Contrato"] = $data;
+			$empregado[$v]["Contrato"] = $data;
 		}
 		$empregado = json_encode($empregado);
 		var_dump($empregado);
 	}
+	//Pesquisa por nome
+	public function PesquisaNomeRapida($database, $nome){
+		$data = $database->select(
+			"Contrato", 
+			["nomeEmpregado", "Cpf", "idRegistro"],
+			["nomeEmpregado[~]" => $nome]
+			);
+		$data = json_encode($data);
+		return $data;
+	}
+	//Inserir Ferias
 	public function InserirFerias($database, $json){
 		$insertFerias = json_decode($json); //Decodificando o JSON
 		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
@@ -90,7 +101,8 @@ class Empregado{
 		else 
 			return json_encode($e);
 	}
-	public function InserirNovoSalario($database, $json){
+	//Alterar Salario
+	public function NovoSalario($database, $json){
 		$insertSalario = json_decode($json); //Decodificando o JSON
 		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
 		$database->insert("Salario", $insertSalario);	
@@ -100,7 +112,8 @@ class Empregado{
 		else 
 			return json_encode($e);
 	}
-	public function InserirNovoCargo($database, $json){
+	//Alterar Cargo
+	public function NovoCargo($database, $json){
 		$insertCargo = json_decode($json); //Decodificando o JSON
 		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
 		$database->insert("Cargo", $insertCargo);
@@ -110,6 +123,7 @@ class Empregado{
 		else 
 			return json_encode($e);	
 	}
+	//Adicionar Contribuição fiscal
 	public function InserirContribSindical($database, $json){
 		$insertContribSindical = json_decode($json); //Decodificando o JSON
 		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
@@ -120,6 +134,7 @@ class Empregado{
 		else 
 			return json_encode($e);	
 	}
+	//Adicionar Acidentes ou doenças profissionais
 	public function InserirADP($database, $json){
 		$insertADP = json_decode($json); //Decodificando o JSON
 		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
@@ -130,6 +145,25 @@ class Empregado{
 		else 
 			return json_encode($e);	
 	}
+	//função retorna todos os dados do Empregado
+	public function RetornaEmpregado($database, $idRegistro){
+		$data = [];
+			$data["RegistroEmpregado"] = $database->select("RegistroEmpregado", "*", ["idRegistro" => $idRegistro]);
+			$data["CaracFisicas"] = $database->select("CaracFisicas", "*", ["idRegistro" => $idRegistro]);
+			$data["Contrato"] = $database->select("Contrato", "*", ["idRegistro" => $idRegistro]);
+			$data["SituacaoFGTS"] = $database->select("SituacaoFGTS", "*", ["idRegistro" => $idRegistro]);
+			$data["Estrangeiros"] = $database->select("Estrangeiros", "*", ["idRegistro" => $idRegistro]);
+			$data["PIS"] = $database->select("PIS", "*", ["idRegistro" => $idRegistro]);
+			$data["Beneficiarios"] = $database->select("Beneficiarios", "*", ["idRegistro" => $idRegistro]);
+			$data["Salario"] = $database->select("Salario", "*", ["idRegistro" => $idRegistro]);
+			$data["Cargo"] = $database->select("Cargo", "*", ["idRegistro" => $idRegistro]);
+			$data["ContribSindical"] = $database->select("ContribSindical", "*", ["idRegistro" => $idRegistro]);
+			$data["ADP"] = $database->select("ADP", "*", ["idRegistro" => $idRegistro]);
+			$data["Ferias"] = $database->select("Ferias", "*", ["idRegistro" => $idRegistro]);
+		$json = json_encode($data);
+		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
+		return $json;
+	}
 }
-
+ 
 ?>

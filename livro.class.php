@@ -23,7 +23,6 @@ class Livro {
 	public function InserirLivro($jsonLivro, $database){
 		$insertLivro = json_decode($jsonLivro); //Decodificando o JSON
 		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
-		
 		$insertLivro = (array) $insertLivro->Livro; //Criando array para o insert
 		//Validando o JSON
 		$v_err = $this->ValidaJson($insertLivro, $database);
@@ -42,12 +41,19 @@ class Livro {
 			return json_encode($e);
 		}
 	}
-	//Consulta de todos os livros existentes no BD
-	public function BuscaLivros($database){
-		$data = $database->select("Livro", "*");
-		$data = json_encode($data);
+	//Retorna a relação de empregados separado por livro
+	public function RelacaoEmpregPorLivro($database){
+		$data = $database->select("Livro","numLivro");
+		foreach ($data as $k => $v) {
+			$livro[$v] = $database->select(
+			"RegistroEmpregado", 
+			array("[><]Contrato" => "idRegistro"),
+			array("RegistroEmpregado.numFolha", "Contrato.nomeEmpregado"),
+			array("RegistroEmpregado.numLivro" => $v)
+			);
+		}
+		$data = json_encode($livro);
 		return $data;
 	}
-
 }
 ?>
