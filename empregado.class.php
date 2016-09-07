@@ -17,7 +17,7 @@ class Empregado{
 		return $v_err;
 	}
 	//Inserção de todas as 12 tabelas do empregado
-	public function InserirEmpregado($jsonEmpregado, $database){
+	public function InserirEmpregado($database, $jsonEmpregado){
 		$insertEmpregado = json_decode($jsonEmpregado); //Decodificando o JSON
 		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
 		//Validando o JSON

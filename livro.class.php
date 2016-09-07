@@ -8,7 +8,7 @@ class Livro {
 		return true;
 	}
 	//Validação do  JSON
-	public function ValidaJson($insertLivro, $database){
+	public function ValidaJson($database, $insertLivro){
 		/*$v_err["numLivro"] = $insertLivro["numLivro"] ? null : "err numLivro";*/
 		/*$v_err["cnpj"] = preg_match("\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}",$insertLivro["cnpj"])? null : "err cnpj";*/
 		$v_err["numFolhas"] = is_numeric($insertLivro["numFolhas"]) ? null : "err numFolhas";
@@ -20,7 +20,7 @@ class Livro {
 		return $v_err;
 	}
 	//Inserção do Livro
-	public function InserirLivro($jsonLivro, $database){
+	public function InserirLivro($database, $jsonLivro){
 		$insertLivro = json_decode($jsonLivro); //Decodificando o JSON
 		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
 		$insertLivro = (array) $insertLivro->Livro; //Criando array para o insert

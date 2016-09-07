@@ -41,9 +41,10 @@ $json1 = '{
 
 $empregado = new Empregado;
 $livro = new Livro;
-$nome = "3";
-$empregado->PesquisaNomeRapida($database, $nome);
-//$empregado->InserirEmpregado($json1, $database);
+$nome = $_POST["nome"];
+$nome = $empregado->PesquisaNomeRapida($database, $nome);
+return $nome;
+//$empregado->InserirEmpregado($database, $json1);
 //$nome = "nome bonito";
 //$empregado->BuscaEmpregadoPorNome($database, $nome);
 //$livro->RelacaoEmpregPorLivro($database);
