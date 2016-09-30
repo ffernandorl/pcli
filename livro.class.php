@@ -46,12 +46,29 @@ class Livro {
 		$data = $database->select("Livro","numLivro");
 		foreach ($data as $k => $v) {
 			$livro[$v] = $database->select(
-			"RegistroEmpregado", 
-			array("[><]Contrato" => "idRegistro"),
-			array("RegistroEmpregado.numFolha", "Contrato.nomeEmpregado"),
-			array("RegistroEmpregado.numLivro" => $v)
-			);
+				"RegistroEmpregado", 
+				array("[><]Contrato" => "idRegistro"),
+				array("RegistroEmpregado.numFolha", "Contrato.nomeEmpregado"),
+				array("RegistroEmpregado.numLivro" => $v)
+				);
 		}
+		$data = json_encode($livro);
+		return $data;
+	}
+	//Retorna os dados dos livros
+	public function DadosLivro($database){
+		$data = $database->select( "Livro", "*");
+		$data = json_encode($data);
+		return $data;
+	}
+	//Encerra livro aberto requisitado.
+	public function EncerraLivro($database, $livro){
+		$database->update(
+			"Livro",
+			["status" => "0"],
+			["numLivro" => $livro]
+			);
+		$data = $database->select("Livro", "status", ["numLivro" => $livro] );
 		$data = json_encode($livro);
 		return $data;
 	}

@@ -3,50 +3,62 @@ require_once 'empregado.class.php';
 require_once 'livro.class.php';
 require_once 'config.php';
 
-//Empregado
-$json1 = '{
-	"RegistroEmpregado":{
-		"idRegistro" : 4,
-		"numFolha": 4,
-		"numLivro": 1,
-		"data" : null,
-		"cidade" : null,
-		"assinaturaEmpregado": null,
-		"observacao": null,
-		"dataDemissao": null,
-		"docsRecebidos": null
-	},
-	"Contrato":{
-		"idContrato": 4,
-		"idRegistro": 4,
-		"nomeEmpregado": "nome bonito",
-		"numCtps": null,
-		"serieCtps": null,
-		"ctpsRural": null,
-		"serieCtpsRural": null,
-		"Cpf": null,
-		"tituloEleitor": null,
-		"zona": null,
-		"rg": null,
-		"dataAdmissao": null,
-		"cargo": null,
-		"salario": null,
-		"salarioExtenso": null,
-		"periodoSalarial": null,
-		"horaEntrada": null,
-		"horaSaida": null,
-		"horaIntervalo": null
+function IndexController($request){
+	$empregado = new Empregado;
+	$livro = new Livro;
+	switch ($request[0]) {
+		case "empregado.IE":
+			return $empregado->InserirEmpregado($database, $request[1]);
+			break;
+		case "empregado.BEPL":
+			return $empregado->BuscaEmpregadoPorLivro($database, $request[1]);
+			break;
+		case "empregado.PNR":
+			return $empregado->PesquisaNomeRapida($database, $request[1]);
+			break;
+		case "empregado.PC":
+			return $empregado->PesquisaCPF($database, $request[1]);
+			break;
+		case "empregado.IF":
+			return $empregado->InserirFerias($database, $request[1]);
+			break;
+		case "empregado.NS":
+			return $empregado->NovoSalario($database, $request[1]);
+			break;
+		case "empregado.NC":
+			return $empregado->NovoCargo($database, $request[1]);
+			break;
+		case "empregado.ICS":
+			return $empregado->InserirContribSindical($database, $request[1]);
+			break;
+		case "empregado.IADP":
+			return $empregado->InserirADP($database, $request[1]);
+			break;
+		case "empregado.RE":
+			return $empregado->RetornaEmpregado($database, $request[1]);
+			break;
+		case "livro.IL":
+			return $livro->InserirLivro($database, $request[1]);
+			break;
+		case "livro.REPL":
+			return $livro->RelacaoEmpregPorLivro($database);
+			break;
+		case "livro.DL":
+			return $livro->DadosLivro($database);
+			break;
+		case "livro.EL":
+			return $livro->EncerraLivro($database, $request[1]);
+			break;		
+		default:
+			return "Erro - requisição não encontrada";
+			break;
 	}
-}';
+	
+}
 
-$empregado = new Empregado;
-$livro = new Livro;
-$nome = $_POST["nome"];
-$nome = $empregado->PesquisaNomeRapida($database, $nome);
-return $nome;
-//$empregado->InserirEmpregado($database, $json1);
-//$nome = "nome bonito";
-//$empregado->BuscaEmpregadoPorNome($database, $nome);
-//$livro->RelacaoEmpregPorLivro($database);
-
+if (!empty($_POST)){
+	$request = json_decode($_POST["request"]);
+	if (json_last_error() != 0) return json_last_error();
+	echo IndexController($_POST["request"]);
+}
 ?>

@@ -21,16 +21,16 @@ class Empregado{
 		$insertEmpregado = json_decode($jsonEmpregado); //Decodificando o JSON
 		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
 		//Validando o JSON
-		/*$v_err = $this->ValidaJson($insertEmpregado);
+		$v_err = $this->ValidaJson($insertEmpregado);
 		foreach ($v_err as $k => $v)
-			if($v) return json_encode($v_err);*/
+			if($v) return json_encode($v_err);
 		//Inserindo no BD
 		$database->pdo->beginTransaction(); //Inicio de uma Transaction
 			//Todos os Inserts
 			$database->insert("RegistroEmpregado",(array) $insertEmpregado->RegistroEmpregado);
-			//$database->insert("CaracFisicas", (array) $insertEmpregado->CaracFisicas);
+			$database->insert("CaracFisicas", (array) $insertEmpregado->CaracFisicas);
 			$database->insert("Contrato", (array) $insertEmpregado->Contrato);
-			/*$database->insert("SituacaoFGTS", (array) $insertEmpregado->SituacaoFGTS);
+			$database->insert("SituacaoFGTS", (array) $insertEmpregado->SituacaoFGTS);
 			$database->insert("Estrangeiros", (array) $insertEmpregado->Estrangeiros);
 			$database->insert("PIS", (array) $insertEmpregado->PIS);
 			$database->insert("Beneficiarios", (array) $insertEmpregado->Beneficiarios);
@@ -38,7 +38,7 @@ class Empregado{
 			$database->insert("Cargo", (array) $insertEmpregado->Cargo);
 			$database->insert("ContribSindical", (array) $insertEmpregado->ContribSindical);
 			$database->insert("ADP", (array) $insertEmpregado->ADP);
-			$database->insert("Ferias", (array) $insertEmpregado->Ferias);	*/
+			$database->insert("Ferias", (array) $insertEmpregado->Ferias);
 		//Avaliação de possivel erro e retorno da função
 		$e = $database->error();
 		if($e[1] == null){
@@ -85,7 +85,17 @@ class Empregado{
 		$data = $database->select(
 			"Contrato", 
 			["nomeEmpregado", "Cpf", "idRegistro"],
-			["nomeEmpregado[~]" => $nome]
+			["nomeEmpregado[~]" => $nome."_"]
+			);
+		$data = json_encode($data);
+		return $data;
+	}
+	//Pesquisa por CPF
+	public function PesquisaCPF($database, $cpf){
+		$data = $database->select(
+			"Contrato",
+			["nomeEmpregado", "idRegistro"],
+			["Cpf" => $cpf]
 			);
 		$data = json_encode($data);
 		return $data;
@@ -165,5 +175,4 @@ class Empregado{
 		return $json;
 	}
 }
- 
 ?>
