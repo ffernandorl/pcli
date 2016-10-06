@@ -19,11 +19,19 @@ class Empregado{
 	//Inserção de todas as 12 tabelas do empregado
 	public function InserirEmpregado($database, $jsonEmpregado){
 		$insertEmpregado = json_decode($jsonEmpregado); //Decodificando o JSON
-		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
+		if (json_last_error() != 0){ //testa se houve erro no parsing
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = json_last_error(); 
+			return $retorno;
+		}
 		//Validando o JSON
 		$v_err = $this->ValidaJson($insertEmpregado);
 		foreach ($v_err as $k => $v)
-			if($v) return json_encode($v_err);
+			if($v){
+				$retorno["status"] = "erro";
+				$retorno["resposta"] = $v_err; 
+				return $retorno;
+			}
 		//Inserindo no BD
 		$database->pdo->beginTransaction(); //Inicio de uma Transaction
 			//Todos os Inserts
@@ -43,10 +51,14 @@ class Empregado{
 		$e = $database->error();
 		if($e[1] == null){
 			$database->pdo->commit();
-			return true;
+			$retorno["status"] = "ok";
+			$retorno["resposta"] = true; 
+			return $retorno;
 		} else {
 			$database->pdo->rollBack();
-			return json_encode($e);
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = $e; 
+			return $retorno;
 		}
 	}
 	//Consulta de um empregado pelo livro
@@ -57,28 +69,16 @@ class Empregado{
 			array("RegistroEmpregado.numFolha", "Contrato.nomeEmpregado"),
 			array("RegistroEmpregado.numLivro" => $livro)
 			);
-		$data = json_encode($data);
-		var_dump($data);
-	}
-	//Consulta de um empregado pelo nome
-	public function BuscaEmpregadoPorNome($database, $nome){
-		$registros = [];
-		$data = $database->select(
-			"RegistroEmpregado", 
-			array("[><]Contrato" => "idRegistro"),
-			array("idRegistro"),
-			array("Contrato.nomeEmpregado" => $nome)
-			);
-		foreach ($data as $k => $v)
-			array_push($registros, $v["idRegistro"]);
-		foreach ($registros as $k => $v) {
-			$data = $database->select("RegistroEmpregado", "*", ["idRegistro" => $v]);
-			$empregado[$v]["RegistroEmpregado"] = $data;
-			$data = $database->select("Contrato", "*", ["idRegistro" => $v]);
-			$empregado[$v]["Contrato"] = $data;
+		$e = $database->error();
+		if($e[1] == null){
+			$retorno["status"] = "ok";
+			$retorno["resposta"] = $data; 
+			return $retorno;
+		} else {
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = $e; 
+			return $retorno;
 		}
-		$empregado = json_encode($empregado);
-		var_dump($empregado);
 	}
 	//Pesquisa por nome
 	public function PesquisaNomeRapida($database, $nome){
@@ -97,63 +97,131 @@ class Empregado{
 			["nomeEmpregado", "idRegistro"],
 			["Cpf" => $cpf]
 			);
-		$data = json_encode($data);
-		return $data;
+		$e = $database->error();
+		if($e[1] == null){
+			$retorno["status"] = "ok";
+			$retorno["resposta"] = $data; 
+			return $retorno;
+		} else {
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = $e; 
+			return $retorno;
+		}
 	}
 	//Inserir Ferias
 	public function InserirFerias($database, $json){
 		$insertFerias = json_decode($json); //Decodificando o JSON
-		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
-		$database->insert("Ferias", $insertFerias);	
+		if (json_last_error() != 0){ //testa se houve erro no parsing
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = json_last_error(); 
+			return $retorno;
+		}
+		$database->pdo->beginTransaction(); //Inicio de uma Transaction
+			$database->insert("Ferias", $insertFerias);	
 		$e = $database->error();
-		if($e[1] == null) 
-			return true;
-		else 
-			return json_encode($e);
+		if($e[1] == null){
+			$database->pdo->commit();
+			$retorno["status"] = "ok";
+			$retorno["resposta"] = true; 
+			return $retorno;
+		} else {
+			$database->pdo->rollBack();
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = $e; 
+			return $retorno;
+		}
 	}
 	//Alterar Salario
 	public function NovoSalario($database, $json){
 		$insertSalario = json_decode($json); //Decodificando o JSON
-		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
-		$database->insert("Salario", $insertSalario);	
+		if (json_last_error() != 0){ //testa se houve erro no parsing
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = json_last_error(); 
+			return $retorno;
+		}
+		$database->pdo->beginTransaction(); //Inicio de uma Transaction
+			$database->insert("Salario", $insertSalario);	
 		$e = $database->error();
-		if($e[1] == null) 
-			return true;
-		else 
-			return json_encode($e);
+		if($e[1] == null){
+			$database->pdo->commit();
+			$retorno["status"] = "ok";
+			$retorno["resposta"] = true; 
+			return $retorno;
+		} else {
+			$database->pdo->rollBack();
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = $e; 
+			return $retorno;
+		}
 	}
 	//Alterar Cargo
 	public function NovoCargo($database, $json){
 		$insertCargo = json_decode($json); //Decodificando o JSON
-		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
-		$database->insert("Cargo", $insertCargo);
+		if (json_last_error() != 0){ //testa se houve erro no parsing
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = json_last_error(); 
+			return $retorno;
+		}
+		$database->pdo->beginTransaction(); //Inicio de uma Transaction		
+			$database->insert("Cargo", $insertCargo);
 		$e = $database->error();
-		if($e[1] == null) 
-			return true;
-		else 
-			return json_encode($e);	
+		if($e[1] == null){
+			$database->pdo->commit();
+			$retorno["status"] = "ok";
+			$retorno["resposta"] = true; 
+			return $retorno;
+		} else {
+			$database->pdo->rollBack();
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = $e; 
+			return $retorno;
+		}	
 	}
 	//Adicionar Contribuição fiscal
 	public function InserirContribSindical($database, $json){
 		$insertContribSindical = json_decode($json); //Decodificando o JSON
-		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
-		$database->insert("ContribSindical", $insertContribSindical);
+		if (json_last_error() != 0){ //testa se houve erro no parsing
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = json_last_error(); 
+			return $retorno;
+		}
+		$database->pdo->beginTransaction(); //Inicio de uma Transaction		
+			$database->insert("ContribSindical", $insertContribSindical);
 		$e = $database->error();
-		if($e[1] == null) 
-			return true;
-		else 
-			return json_encode($e);	
+		if($e[1] == null){
+			$database->pdo->commit();
+			$retorno["status"] = "ok";
+			$retorno["resposta"] = true; 
+			return $retorno;
+		} else {
+			$database->pdo->rollBack();
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = $e; 
+			return $retorno;
+		}	
 	}
 	//Adicionar Acidentes ou doenças profissionais
 	public function InserirADP($database, $json){
 		$insertADP = json_decode($json); //Decodificando o JSON
-		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
-		$database->insert("ADP", $insertADP);
+		if (json_last_error() != 0){ //testa se houve erro no parsing
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = json_last_error(); 
+			return $retorno;
+		}
+		$database->pdo->beginTransaction(); //Inicio de uma Transaction	
+			$database->insert("ADP", $insertADP);
 		$e = $database->error();
-		if($e[1] == null) 
-			return true;
-		else 
-			return json_encode($e);	
+		if($e[1] == null){
+			$database->pdo->commit();
+			$retorno["status"] = "ok";
+			$retorno["resposta"] = true; 
+			return $retorno;
+		} else {
+			$database->pdo->rollBack();
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = $e; 
+			return $retorno;
+		}
 	}
 	//função retorna todos os dados do Empregado
 	public function RetornaEmpregado($database, $idRegistro){
@@ -170,9 +238,18 @@ class Empregado{
 			$data["ContribSindical"] = $database->select("ContribSindical", "*", ["idRegistro" => $idRegistro]);
 			$data["ADP"] = $database->select("ADP", "*", ["idRegistro" => $idRegistro]);
 			$data["Ferias"] = $database->select("Ferias", "*", ["idRegistro" => $idRegistro]);
-		$json = json_encode($data);
-		if (json_last_error() != 0) return json_last_error(); //testa se houve erro no parsing
-		return $json;
+		$e = $database->error();
+		if($e[1] == null){
+			$database->pdo->commit();
+			$retorno["status"] = "ok";
+			$retorno["resposta"] = $data; 
+			return $retorno;
+		} else {
+			$database->pdo->rollBack();
+			$retorno["status"] = "erro";
+			$retorno["resposta"] = $e; 
+			return $retorno;
+		}
 	}
 }
 ?>

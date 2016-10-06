@@ -53,12 +53,21 @@ function IndexController($request){
 			return "Erro - requisição não encontrada";
 			break;
 	}
-	
 }
 
 if (!empty($_POST)){
-	$request = json_decode($_POST["request"]);
-	if (json_last_error() != 0) return json_last_error();
-	echo IndexController($_POST["request"]);
+	$request = json_decode($_POST["request"], true);
+	if (json_last_error() == 0){
+		$request = json_encode(IndexController($request));
+		if (json_last_error() == 0){
+			echo $request;
+		}else {
+			$err["status"] = "erro";
+			$err["resposta"] = "parsing erro";
+		}
+	} else {
+		$err["status"] = "erro";
+		$err["resposta"] = "parsing erro";
+	}
 }
 ?>
