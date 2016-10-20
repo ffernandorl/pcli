@@ -1,8 +1,16 @@
 <?php 
+/**
+* @author Francisco Fernando
+* @copyright 2016 LATECS
+*/
 require_once 'empregado.class.php';
 require_once 'livro.class.php';
 require_once 'config.php';
-
+/**
+ * function of request routing 
+ * @return array array of response by function requested
+ * @param array $request 
+ */
 function IndexController($request){
 	$empregado = new Empregado;
 	$livro = new Livro;
@@ -57,9 +65,11 @@ function IndexController($request){
 
 if (!empty($_POST)){
 	$request = json_decode($_POST["request"], true);
-	if (json_last_error() == 0){
+	//test if happened an error in parsing of request
+	if (json_last_error() == 0){ 
 		$request = json_encode(IndexController($request));
-		if (json_last_error() == 0){
+		//test if happened an error in parsing of response
+		if (json_last_error() == 0){ 
 			echo $request;
 		}else {
 			$err["status"] = "erro";

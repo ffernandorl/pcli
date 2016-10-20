@@ -1,4 +1,8 @@
 <?php
+/**
+* @author Francisco Fernando
+* @copyright 2016 LATECS
+*/
 require_once 'medoo.php';
 
 $database = new medoo([

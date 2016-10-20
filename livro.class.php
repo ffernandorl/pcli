@@ -1,13 +1,25 @@
 <?php
+/**
+* @author Francisco Fernando
+* @copyright 2016 LATECS
+*/
 class Livro {
-	//Função para avaliar se todos os livros existentes estão fechados
+	/**
+	 * Function to evaluate if all books are closed
+	 * @return boolean true: all books are closed
+	 * @param resource $database
+	 */
 	public function AvaliaStatus($database){
 		$data = $database->select("Livro", "status");
 		foreach ($data as $k => $v)
 			if($v == 1) return false;
 		return true;
 	}
-	//Validação do  JSON
+	/**
+	 * JSON Validation
+	 * @return array array of errors
+	 * @param resource array $database $insertLivro
+	 */
 	public function ValidaJson($database, $insertLivro){
 		$v_err["numFolhas"] = is_numeric($insertLivro["numFolhas"]) ? null : "err numFolhas";
 		$v_err["drtLocal"] = $insertLivro["drtLocal"] ? null : "err drtLocal";
@@ -16,16 +28,20 @@ class Livro {
 		$v_err["status"] = $this->AvaliaStatus($database) ? null : "err - existe um livro aberto";
 		return $v_err;
 	}
-	//Inserção do Livro
+	/**
+	 * Insertion of books
+	 * @return array array of response
+	 * @param resource object $database $jsonLivro
+	 */
 	public function InserirLivro($database, $jsonLivro){
-		$insertLivro = json_decode($jsonLivro); //Decodificando o JSON
-		if (json_last_error() != 0){ //testa se houve erro no parsing
+		$insertLivro = json_decode($jsonLivro); //Decoding JSON
+		if (json_last_error() != 0){ //test if happened an error in parsing
 			$retorno["status"] = "erro";
 			$retorno["resposta"] = json_last_error(); 
 			return $retorno;
 		}
-		$insertLivro = (array) $insertLivro->Livro; //Criando array para o insert
-		//Validando o JSON
+		$insertLivro = (array) $insertLivro->Livro; //array creating for insertion
+		//JSON Validation
 		$v_err = $this->ValidaJson($insertLivro, $database);
 		foreach ($v_err as $k => $v)
 			if($v){
@@ -33,10 +49,10 @@ class Livro {
 				$retorno["resposta"] = $v_err; 
 				return $retorno;
 			}
-		//Inserindo no BD
-		$database->pdo->beginTransaction(); //Inicio de uma Transaction
-			$database->insert("Livro",$insertLivro); //Inserindo
-		//Avaliação de possivel erro e retorno da função
+		//Insertion in Database
+		$database->pdo->beginTransaction(); //begining a Transaction
+			$database->insert("Livro",$insertLivro); //Insertion
+		//evaluation of possible error and return of function
 		$e = $database->error();
 		if($e[1] == null){
 			$database->pdo->commit();
@@ -50,7 +66,11 @@ class Livro {
 			return $retorno;
 		}
 	}
-	//Retorna a relação de empregados separado por livro
+	/**
+	 * return relation of employee separated by books
+	 * @return array array of response
+	 * @param resource $database
+	 */
 	public function RelacaoEmpregPorLivro($database){
 		$data = $database->select("Livro","numLivro");
 		foreach ($data as $k => $v) {
@@ -61,7 +81,7 @@ class Livro {
 				array("RegistroEmpregado.numLivro" => $v)
 				);
 		}
-		//Avaliação de possivel erro e retorno da função
+		//evaluation of possible error and return of function
 		$e = $database->error();
 		if($e[1] == null){
 			$retorno["status"] = "ok";
@@ -73,9 +93,14 @@ class Livro {
 			return $retorno;
 		}
 	}
-	//Retorna os dados dos livros
+	/**
+	 * return data of all books
+	 * @return array array of response
+	 * @param resource $database
+	 */
 	public function DadosLivro($database){
 		$data = $database->select( "Livro", "*");
+		//evaluation of possible error and return of function
 		$e = $database->error();
 		if($e[1] == null){
 			$retorno["status"] = "ok";
@@ -87,13 +112,18 @@ class Livro {
 			return $retorno;
 		}
 	}
-	//Encerra livro aberto requisitado.
+	/**
+	 * close the book
+	 * @return array array of response
+	 * @param resource string $database $livro
+	 */
 	public function EncerraLivro($database, $livro){
 		$database->update(
 			"Livro",
 			["status" => "0"],
 			["numLivro" => $livro]
 			);
+		//evaluation of possible error and return of function
 		$e = $database->error();
 		if($e[1] == null){
 			$retorno["status"] = "ok";

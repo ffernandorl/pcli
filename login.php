@@ -1,4 +1,8 @@
 <?php
+/**
+* @author Francisco Fernando
+* @copyright 2016 LATECS
+*/
 require_once 'senha.class.php';
 require_once 'config.php';
 if (!empty($_POST)){
