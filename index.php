@@ -11,42 +11,42 @@ require_once 'config.php';
  * @return array array of response by function requested
  * @param array $request 
  */
-function IndexController($request){
+function IndexController($request, $database){
 	$empregado = new Empregado;
 	$livro = new Livro;
-	switch ($request[0]) {
+	switch ($request["method"]){
 		case "empregado.IE":
-			return $empregado->InserirEmpregado($database, $request[1]);
+			return $empregado->InserirEmpregado($database, $request["data"]);
 			break;
 		case "empregado.BEPL":
-			return $empregado->BuscaEmpregadoPorLivro($database, $request[1]);
+			return $empregado->BuscaEmpregadoPorLivro($database, $request["data"]);
 			break;
 		case "empregado.PNR":
-			return $empregado->PesquisaNomeRapida($database, $request[1]);
+			return $empregado->PesquisaNomeRapida($database, $request["data"]);
 			break;
 		case "empregado.PC":
-			return $empregado->PesquisaCPF($database, $request[1]);
+			return $empregado->PesquisaCPF($database, $request["data"]);
 			break;
 		case "empregado.IF":
-			return $empregado->InserirFerias($database, $request[1]);
+			return $empregado->InserirFerias($database, $request["data"]);
 			break;
 		case "empregado.NS":
-			return $empregado->NovoSalario($database, $request[1]);
+			return $empregado->NovoSalario($database, $request["data"]);
 			break;
 		case "empregado.NC":
-			return $empregado->NovoCargo($database, $request[1]);
+			return $empregado->NovoCargo($database, $request["data"]);
 			break;
 		case "empregado.ICS":
-			return $empregado->InserirContribSindical($database, $request[1]);
+			return $empregado->InserirContribSindical($database, $request["data"]);
 			break;
 		case "empregado.IADP":
-			return $empregado->InserirADP($database, $request[1]);
+			return $empregado->InserirADP($database, $request["data"]);
 			break;
 		case "empregado.RE":
-			return $empregado->RetornaEmpregado($database, $request[1]);
+			return $empregado->RetornaEmpregado($database, $request["data"]);
 			break;
 		case "livro.IL":
-			return $livro->InserirLivro($database, $request[1]);
+			return $livro->InserirLivro($database, $request["data"]);
 			break;
 		case "livro.REPL":
 			return $livro->RelacaoEmpregPorLivro($database);
@@ -55,7 +55,7 @@ function IndexController($request){
 			return $livro->DadosLivro($database);
 			break;
 		case "livro.EL":
-			return $livro->EncerraLivro($database, $request[1]);
+			return $livro->EncerraLivro($database, $request["data"]);
 			break;		
 		default:
 			return "Erro - requisição não encontrada";
@@ -63,8 +63,7 @@ function IndexController($request){
 	}
 }
 
-//if (!empty($_POST)){
-	$request = json_decode(file_get_contents("php://input")); //json_decode($_POST["request"], true);
+	$request = json_decode(file_get_contents("php://input"), true);
 	//test if happened an error in parsing of request
 	if (json_last_error() == 0){ 
 		$request = json_encode(IndexController($request));
@@ -72,12 +71,14 @@ function IndexController($request){
 		if (json_last_error() == 0){ 
 			echo $request;
 		}else {
-			$err["status"] = "erro";
-			$err["resposta"] = "parsing erro";
+			$err["status"] = "error";
+			$err["resposta"] = "parsing error";
+			echo json_encode($err);
 		}
 	} else {
-		$err["status"] = "erro";
-		$err["resposta"] = "parsing erro";
-//	}
-}
+		$err["status"] = "error";
+		$err["resposta"] = "parsing error";
+		echo json_encode($err);
+	}
+
 ?>

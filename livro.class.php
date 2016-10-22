@@ -99,7 +99,7 @@ class Livro {
 	 * @param resource $database
 	 */
 	public function DadosLivro($database){
-		$data = $database->select( "Livro", "*");
+		$data = $database->select("Livro", "*");
 		//evaluation of possible error and return of function
 		$e = $database->error();
 		if($e[1] == null){

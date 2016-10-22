@@ -10,6 +10,7 @@ $database = new medoo([
     'database_name' => 'prontoclinica',
     'server' => 'localhost',
     'username' => 'root',
-    'password' => 'annatar'
+    'password' => 'annatar',
+    'charset' => 'utf8'
    ]);
 ?>
