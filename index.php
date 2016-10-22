@@ -66,7 +66,7 @@ function IndexController($request, $database){
 	$request = json_decode(file_get_contents("php://input"), true);
 	//test if happened an error in parsing of request
 	if (json_last_error() == 0){ 
-		$request = json_encode(IndexController($request));
+		$request = json_encode(IndexController($request,$database));
 		//test if happened an error in parsing of response
 		if (json_last_error() == 0){ 
 			echo $request;
