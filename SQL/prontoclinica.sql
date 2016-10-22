@@ -18,7 +18,7 @@ CREATE TABLE Empresa (
 ) ENGINE=InnoDB;
 
 CREATE TABLE Livro(
-	numLivro int(11) NOT NULL,
+	numLivro int(11) NOT NULL AUTO_INCREMENT,
 	cnpj varchar(15),
 	numFolhas int(11),
 	drtLocal varchar(50),
@@ -31,7 +31,7 @@ CREATE TABLE Livro(
 ) ENGINE=InnoDB;
 
 CREATE TABLE TermoDeEncerramento (
-	idTE int(11),
+	idTE int(11) AUTO_INCREMENT,
 	numRegistroEmpregados int(11),
 	data date,
 	cnpj varchar(15),
@@ -43,7 +43,7 @@ CREATE TABLE TermoDeEncerramento (
 -- REGISTRO DE EMPREGAODS --
 
 CREATE TABLE RegistroEmpregado (
-	idRegistro int(11),
+	idRegistro int(11) NOT NULL AUTO_INCREMENT,
 	numFolha int(11),
 	numLivro int(11),
 	data date,
@@ -59,7 +59,7 @@ CREATE TABLE RegistroEmpregado (
 -- TABELAS DEPENDENTES DO REGISTRO DE EMPREGADO --
 
 CREATE TABLE CaracFisicas (
-	idCF int(11),
+	idCF int(11) NOT NULL AUTO_INCREMENT,
 	idRegistro int(11),
 	cor varchar(30),
 	cabelo varchar(30),
@@ -72,7 +72,7 @@ CREATE TABLE CaracFisicas (
 ) ENGINE=InnoDB;
 
 CREATE TABLE Contrato (
-	idContrato int(11),
+	idContrato int(11) NOT NULL AUTO_INCREMENT,
 	idRegistro int(11),
 	nomeEmpregado varchar(100),
 	numCtps varchar(15),
@@ -96,7 +96,7 @@ CREATE TABLE Contrato (
 ) ENGINE=InnoDB;
 
 CREATE TABLE SituacaoFGTS (
-	idSFGTS int(11),
+	idSFGTS int(11) NOT NULL AUTO_INCREMENT,
 	idRegistro int(11),
 	optante char(1),
 	dataOpcao date,
@@ -121,7 +121,7 @@ CREATE TABLE SituacaoFGTS (
 ) ENGINE=InnoDB;
 
 CREATE TABLE Estrangeiros (
-	idEstrangeiro int(11),
+	idEstrangeiro int(11) NOT NULL AUTO_INCREMENT,
 	idRegistro int(11),
 	numCarteira int(5),
 	numRG varchar(15),
@@ -137,7 +137,7 @@ CREATE TABLE Estrangeiros (
 ) ENGINE=InnoDB;
 
 CREATE TABLE PIS (
-	idPIS int(11),
+	idPIS int(11) NOT NULL AUTO_INCREMENT,
 	idRegistro int(11),
 	dataCadastro date,
 	numCadastro int(11),
@@ -152,14 +152,14 @@ CREATE TABLE PIS (
 ) ENGINE=InnoDB;
 
 CREATE TABLE Beneficiarios (
-	idBeneficiario int(11),
+	idBeneficiario int(11) NOT NULL AUTO_INCREMENT,
 	idRegistro int(11),
 	PRIMARY KEY (idBeneficiario),
 	FOREIGN KEY (idRegistro) REFERENCES RegistroEmpregado (idRegistro)
 ) ENGINE=InnoDB;
 
 CREATE TABLE Salario (
-	idSalario int(11),
+	idSalario int(11) NOT NULL AUTO_INCREMENT,
 	idRegistro int(11),
 	data date,
 	salario varchar(15),
@@ -169,7 +169,7 @@ CREATE TABLE Salario (
 ) ENGINE=InnoDB;
 
 CREATE TABLE Cargo (
-	idCargo int(11),
+	idCargo int(11) NOT NULL AUTO_INCREMENT,
 	idRegistro int(11),
 	data date,
 	cargo varchar(50),
@@ -178,7 +178,7 @@ CREATE TABLE Cargo (
 ) ENGINE=InnoDB;
 	
 CREATE TABLE ContribSindical (
-	idContrib int(11),
+	idContrib int(11) NOT NULL AUTO_INCREMENT,
 	idRegistro int(11),
 	numGuia int(5),
 	data date,
@@ -188,7 +188,7 @@ CREATE TABLE ContribSindical (
 ) ENGINE=InnoDB;
 
 CREATE TABLE ADP (
-	idADP int(11),
+	idADP int(11) NOT NULL AUTO_INCREMENT,
 	idRegistro int(11),
 	descricao varchar(140),
 	data date,
@@ -198,7 +198,7 @@ CREATE TABLE ADP (
 ) ENGINE=InnoDB;
 
 CREATE TABLE Ferias (
-	idFerias int(11),
+	idFerias int(11) NOT NULL AUTO_INCREMENT,
 	idRegistro int(11),
 	dataIncio date,
 	dataTermino date,

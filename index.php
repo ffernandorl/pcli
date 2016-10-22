@@ -63,8 +63,8 @@ function IndexController($request){
 	}
 }
 
-if (!empty($_POST)){
-	$request = json_decode($_POST["request"], true);
+//if (!empty($_POST)){
+	$request = json_decode(file_get_contents("php://input")); //json_decode($_POST["request"], true);
 	//test if happened an error in parsing of request
 	if (json_last_error() == 0){ 
 		$request = json_encode(IndexController($request));
@@ -78,6 +78,6 @@ if (!empty($_POST)){
 	} else {
 		$err["status"] = "erro";
 		$err["resposta"] = "parsing erro";
-	}
+//	}
 }
 ?>
