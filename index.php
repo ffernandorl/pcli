@@ -5,7 +5,9 @@
 */
 require_once 'empregado.class.php';
 require_once 'livro.class.php';
+require_once 'empresa.class.php';
 require_once 'config.php';
+
 /**
  * function of request routing 
  * @return array array of response by function requested
@@ -14,6 +16,7 @@ require_once 'config.php';
 function IndexController($request, $database){
 	$empregado = new Empregado;
 	$livro = new Livro;
+	$empresa = new Empresa;
 	switch ($request["method"]){
 		case "empregado.IE":
 			return $empregado->InserirEmpregado($database, $request["data"]);
@@ -46,7 +49,7 @@ function IndexController($request, $database){
 			return $empregado->RetornaEmpregado($database, $request["data"]);
 			break;
 		case "livro.IL":
-			return $livro->InserirLivro($database, $request["data"]);
+			return $livro->InserirLivro($database, $request["data"][0]);
 			break;
 		case "livro.REPL":
 			return $livro->RelacaoEmpregPorLivro($database);
@@ -56,9 +59,14 @@ function IndexController($request, $database){
 			break;
 		case "livro.EL":
 			return $livro->EncerraLivro($database, $request["data"]);
-			break;		
+			break;
+		case "empresa.DE":
+			return $empresa->DadosEmpresa($database);
+			break;	
 		default:
-			return "Erro - requisição não encontrada";
+			$retorno["status"] = "400";
+			$retorno["resposta"] = "request not found"; 
+			return $retorno;
 			break;
 	}
 }
@@ -71,14 +79,21 @@ function IndexController($request, $database){
 		if (json_last_error() == 0){ 
 			echo $request;
 		}else {
-			$err["status"] = "error";
-			$err["resposta"] = "parsing error";
+			$err["status"] = "507";
+			$err["resposta"] = "parsing error from Server JSON";
 			echo json_encode($err);
 		}
 	} else {
-		$err["status"] = "error";
-		$err["resposta"] = "parsing error";
+		$err["status"] = "506";
+		$err["resposta"] = "parsing error from Client JSON";
 		echo json_encode($err);
 	}
 
+/*
+$j = '{"method":"livro.IL","data":[{"numLivro":null,"numFolhas":"50","drtLocal":"123456789","livroAnterior":"1","data":"2016-10-02","assinaturaEmpregador":"jose","status":"1","numEmpregados":"3"}]}';
+$request = json_decode($j, true);
+//var_dump($request);
+$request = json_encode(IndexController($request,$database));
+var_dump($request);
+*/
 ?>

@@ -19,25 +19,24 @@ CREATE TABLE Empresa (
 
 CREATE TABLE Livro(
 	numLivro int(11) NOT NULL AUTO_INCREMENT,
-	cnpj varchar(15),
 	numFolhas int(11),
 	drtLocal varchar(50),
 	livroAnterior int(11),
 	data date,
 	assinaturaEmpregador varchar(50),
 	status char(1),
-	PRIMARY KEY (numLivro),
-	FOREIGN KEY (cnpj) REFERENCES Empresa (cnpj)	
+	numEmpregados int(11) NOT NULL,
+	PRIMARY KEY (numLivro)
 ) ENGINE=InnoDB;
 
 CREATE TABLE TermoDeEncerramento (
 	idTE int(11) AUTO_INCREMENT,
-	numRegistroEmpregados int(11),
 	data date,
-	cnpj varchar(15),
+	numLivro int(11),
+	cidade varchar(30),
 	assinaturaEmpregador varchar(50),
 	PRIMARY KEY (idTE),
-	FOREIGN KEY (cnpj) REFERENCES Empresa (cnpj)
+	FOREIGN KEY (numLivro) REFERENCES Livro (numLivro)
 ) ENGINE=InnoDB;
 
 -- REGISTRO DE EMPREGAODS --
@@ -48,10 +47,12 @@ CREATE TABLE RegistroEmpregado (
 	numLivro int(11),
 	data date,
 	cidade varchar(40),
-	assinaturaEmpregado varchar(50),
+	assinaturaEmpregadoEntrada varchar(50),
+	assinaturaEmpregadoSaida varchar(50),
 	observacao varchar(140),
 	dataDemissao date,
 	docsRecebidos varchar(140),
+	beneficiarios varchar(140),
 	PRIMARY KEY (idRegistro),
 	FOREIGN KEY (numLivro) REFERENCES Livro (numLivro)
 ) ENGINE=InnoDB;
@@ -151,18 +152,12 @@ CREATE TABLE PIS (
 	FOREIGN KEY (idRegistro) REFERENCES RegistroEmpregado (idRegistro)
 ) ENGINE=InnoDB;
 
-CREATE TABLE Beneficiarios (
-	idBeneficiario int(11) NOT NULL AUTO_INCREMENT,
-	idRegistro int(11),
-	PRIMARY KEY (idBeneficiario),
-	FOREIGN KEY (idRegistro) REFERENCES RegistroEmpregado (idRegistro)
-) ENGINE=InnoDB;
-
 CREATE TABLE Salario (
 	idSalario int(11) NOT NULL AUTO_INCREMENT,
 	idRegistro int(11),
 	data date,
 	salario varchar(15),
+	salarioAnterior varchar(15),
 	frequencia varchar(25),
 	PRIMARY KEY (idSalario),
 	FOREIGN KEY (idRegistro) REFERENCES RegistroEmpregado (idRegistro)
@@ -200,10 +195,27 @@ CREATE TABLE ADP (
 CREATE TABLE Ferias (
 	idFerias int(11) NOT NULL AUTO_INCREMENT,
 	idRegistro int(11),
-	dataIncio date,
+	dataInicio date,
 	dataTermino date,
 	inicioPeriodo date,
 	terminoPeriodo date,
 	PRIMARY KEY (idFerias),
 	FOREIGN KEY (idRegistro) REFERENCES RegistroEmpregado (idRegistro)
 ) ENGINE=InnoDB;
+
+
+-- login e senha --
+
+CREATE TABLE Login (
+	user varchar(12),
+	k varchar(60),
+	PRIMARY KEY (user)
+) ENGINE=InnoDB;
+
+-- insercoes de dados --
+
+insert into Empresa values ("Prontoclinica", "Rua das Abobrinhas", "2030", "Parnaíba", "Piauí", "Odontologia", "123456", "123456789", 9876543210 );
+insert into Livro values (NULL , 50, "123456789", NULL, "2016/10/02", "jose", "1", 3);
+insert into RegistroEmpregado values (NULL, "2", "1", "2016/10/02", "Parnaíba", "jose", NULL, NULL, NULL, NULL, "josezinho" );
+insert into CaracFisicas values (NULL, 1, "azul", "longo", "vesgo", "1,72", "65kg", "de transito");
+insert into Contrato values (NULL, 1, "senhor das neves", "123456789", "1234", NULL, NULL, "123456789", "1234567890", "20523", "1234567", "2016/12/08", "consultor", "10", "dez", "mensal", "08:00", "16:00", "01:00" );

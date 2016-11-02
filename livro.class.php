@@ -24,25 +24,19 @@ class Livro {
 		$v_err["numFolhas"] = is_numeric($insertLivro["numFolhas"]) ? null : "err numFolhas";
 		$v_err["drtLocal"] = $insertLivro["drtLocal"] ? null : "err drtLocal";
 		$v_err["livroAnterior"] = is_numeric($insertLivro["livroAnterior"]) ? null : "err livroAnterior";
-		$v_err["data"] = preg_match("\d{4}\/\d{2}\/\d{1,2}\/",$insertLivro["data"])? null : "err data";
+		$v_err["data"] = preg_match("/\d{4}\-\d{2}-\d{2}/",$insertLivro["data"])? null : "err data";
 		$v_err["status"] = $this->AvaliaStatus($database) ? null : "err - existe um livro aberto";
 		return $v_err;
 	}
 	/**
 	 * Insertion of books
 	 * @return array array of response
-	 * @param resource object $database $jsonLivro
+	 * @param resource array $database $insertLivro
 	 */
-	public function InserirLivro($database, $jsonLivro){
-		$insertLivro = json_decode($jsonLivro); //Decoding JSON
-		if (json_last_error() != 0){ //test if happened an error in parsing
-			$retorno["status"] = "erro";
-			$retorno["resposta"] = json_last_error(); 
-			return $retorno;
-		}
-		$insertLivro = (array) $insertLivro->Livro; //array creating for insertion
+	public function InserirLivro($database, $insertLivro){
+		var_dump($insertLivro);
 		//JSON Validation
-		$v_err = $this->ValidaJson($insertLivro, $database);
+		$v_err = $this->ValidaJson($database, $insertLivro);
 		foreach ($v_err as $k => $v)
 			if($v){
 				$retorno["status"] = "erro";
@@ -56,8 +50,8 @@ class Livro {
 		$e = $database->error();
 		if($e[1] == null){
 			$database->pdo->commit();
-			$retorno["status"] = "ok";
-			$retorno["resposta"] = true; 
+			$retorno["status"] = 200;
+			$retorno["resposta"] = null; 
 			return $retorno;
 		} else {
 			$database->pdo->rollBack();
@@ -99,7 +93,7 @@ class Livro {
 	 * @param resource $database
 	 */
 	public function DadosLivro($database){
-		$data = $database->select("Livro", "*");
+		$data = $database->select("Livro","*");
 		//evaluation of possible error and return of function
 		$e = $database->error();
 		if($e[1] == null){
