@@ -88,7 +88,7 @@ class Livro {
 			);
 		//evaluation of possible error and return of function
 		$e = $database->error();
-		return Retorno::MedooErrorTest($e, true;
+		return Retorno::MedooErrorTest($e, true);
 	}
 }
 ?>
