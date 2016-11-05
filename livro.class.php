@@ -3,6 +3,7 @@
 * @author Francisco Fernando
 * @copyright 2016 LATECS
 */
+require_once 'retorno.class.php';
 class Livro {
 	/**
 	 * Function to evaluate if all books are closed
@@ -12,7 +13,7 @@ class Livro {
 	public function AvaliaStatus($database){
 		$data = $database->select("Livro", "status");
 		foreach ($data as $k => $v)
-			if($v == 1) return false;
+			if($v == 'a') return false;
 		return true;
 	}
 	/**
@@ -34,31 +35,15 @@ class Livro {
 	 * @param resource array $database $insertLivro
 	 */
 	public function InserirLivro($database, $insertLivro){
-		var_dump($insertLivro);
 		//JSON Validation
-		$v_err = $this->ValidaJson($database, $insertLivro);
-		foreach ($v_err as $k => $v)
-			if($v){
-				$retorno["status"] = "erro";
-				$retorno["resposta"] = $v_err; 
-				return $retorno;
-			}
+		$v = Retorno::ValidationJson($this->ValidaJson($database, $insertLivro));
+		if ($v) return $v;	
 		//Insertion in Database
 		$database->pdo->beginTransaction(); //begining a Transaction
 			$database->insert("Livro",$insertLivro); //Insertion
 		//evaluation of possible error and return of function
 		$e = $database->error();
-		if($e[1] == null){
-			$database->pdo->commit();
-			$retorno["status"] = 200;
-			$retorno["resposta"] = null; 
-			return $retorno;
-		} else {
-			$database->pdo->rollBack();
-			$retorno["status"] = "erro";
-			$retorno["resposta"] = $e; 
-			return $retorno;
-		}
+		return Retorno::MedooErrorTest($e, true);
 	}
 	/**
 	 * return relation of employee separated by books
@@ -77,15 +62,7 @@ class Livro {
 		}
 		//evaluation of possible error and return of function
 		$e = $database->error();
-		if($e[1] == null){
-			$retorno["status"] = "ok";
-			$retorno["resposta"] = $livro; 
-			return $retorno;
-		} else {
-			$retorno["status"] = "erro";
-			$retorno["resposta"] = $e; 
-			return $retorno;
-		}
+		return Retorno::MedooErrorTest($e, $data);
 	}
 	/**
 	 * return data of all books
@@ -96,15 +73,7 @@ class Livro {
 		$data = $database->select("Livro","*");
 		//evaluation of possible error and return of function
 		$e = $database->error();
-		if($e[1] == null){
-			$retorno["status"] = "ok";
-			$retorno["resposta"] = $data; 
-			return $retorno;
-		} else {
-			$retorno["status"] = "erro";
-			$retorno["resposta"] = $e; 
-			return $retorno;
-		}
+		return Retorno::MedooErrorTest($e, $data);
 	}
 	/**
 	 * close the book
@@ -114,20 +83,12 @@ class Livro {
 	public function EncerraLivro($database, $livro){
 		$database->update(
 			"Livro",
-			["status" => "0"],
+			["status" => "f"],
 			["numLivro" => $livro]
 			);
 		//evaluation of possible error and return of function
 		$e = $database->error();
-		if($e[1] == null){
-			$retorno["status"] = "ok";
-			$retorno["resposta"] = $database->select("Livro", "status", ["numLivro" => $livro] ); 
-			return $retorno;
-		} else {
-			$retorno["status"] = "erro";
-			$retorno["resposta"] = $e; 
-			return $retorno;
-		}
+		return Retorno::MedooErrorTest($e, true;
 	}
 }
 ?>

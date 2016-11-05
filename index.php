@@ -7,7 +7,6 @@ require_once 'empregado.class.php';
 require_once 'livro.class.php';
 require_once 'empresa.class.php';
 require_once 'config.php';
-
 /**
  * function of request routing 
  * @return array array of response by function requested
@@ -88,6 +87,30 @@ function IndexController($request, $database){
 		$err["resposta"] = "parsing error from Client JSON";
 		echo json_encode($err);
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 $j = '{"method":"livro.IL","data":[{"numLivro":null,"numFolhas":"50","drtLocal":"123456789","livroAnterior":"1","data":"2016-10-02","assinaturaEmpregador":"jose","status":"1","numEmpregados":"3"}]}';

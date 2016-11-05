@@ -3,6 +3,7 @@
 * @author Francisco Fernando
 * @copyright 2016 LATECS
 */
+require_once 'retorno.class.php';
 class Empregado{
 	/**
 	 * JSON Validation
@@ -29,15 +30,9 @@ class Empregado{
 	 * @param resource object $database $insertEmpregado 
 	 */
 	public function InserirEmpregado($database, $insertEmpregado){
-		
 		//JSON Validation
-		$v_err = $this->ValidaJson($insertEmpregado);
-		foreach ($v_err as $k => $v)
-			if($v){
-				$retorno["status"] = "erro";
-				$retorno["resposta"] = $v_err; 
-				return $retorno;
-			}
+		$v = Retorno::ValidationJson($this->ValidaJson($insertEmpregado));
+		if ($v) return $v;
 		//Insertion in Database
 		$database->pdo->beginTransaction(); //begining a Transaction
 			//all the inserts
@@ -53,24 +48,14 @@ class Empregado{
 			$database->insert("ADP", $insertEmpregado["ADP"]);
 			$database->insert("Ferias", $insertEmpregado["Ferias"]);
 		//Increase "numEmpregados" in "Livro"
-		$livro = (array) $insertEmpregado["RegistroEmpregado"]["numLivro"];
+		$livro = $insertEmpregado["RegistroEmpregado"]["numLivro"];
 		$database->update(
 			"Livro",
 			["numEmpregados[+]" => 1],
 			["numLivro" => $livro]);
 		//evaluation of possible error and return of function	
 		$e = $database->error();
-		if($e[1] == null){
-			$database->pdo->commit();
-			$retorno["status"] = "ok";
-			$retorno["resposta"] = true; 
-			return $retorno;
-		} else {
-			$database->pdo->rollBack();
-			$retorno["status"] = "erro";
-			$retorno["resposta"] = $e; 
-			return $retorno;
-		}
+		return Retorno::MedooErrorTest($e, true);
 	}
 	/**
 	 * query of an employee by book
@@ -86,29 +71,22 @@ class Empregado{
 			);
 		//evaluation of possible error and return of function
 		$e = $database->error();
-		if($e[1] == null){
-			$retorno["status"] = "ok";
-			$retorno["resposta"] = $data; 
-			return $retorno;
-		} else {
-			$retorno["status"] = "erro";
-			$retorno["resposta"] = $e; 
-			return $retorno;
-		}
+		return Retorno::MedooErrorTest($e, $data);
 	}
 	/**
 	 * query by name
 	 * @return array array of response
 	 * @param resource string $database $nome 
 	 */
+	//ajeitar
 	public function PesquisaNomeRapida($database, $nome){
 		$data = $database->select(
 			"Contrato", 
 			["nomeEmpregado", "Cpf", "idRegistro"],
 			["nomeEmpregado[~]" => $nome."_"]
 			);
-		$data = json_encode($data);
-		return $data;
+		$e = $database->error();
+		return Retorno::MedooErrorTest($e, $data);
 	}
 	/**
 	 * query by CPF
@@ -123,15 +101,7 @@ class Empregado{
 			);
 		//evaluation of possible error and return of function
 		$e = $database->error();
-		if($e[1] == null){
-			$retorno["status"] = "ok";
-			$retorno["resposta"] = $data; 
-			return $retorno;
-		} else {
-			$retorno["status"] = "erro";
-			$retorno["resposta"] = $e; 
-			return $retorno;
-		}
+		return Retorno::MedooErrorTest($e, $data);
 	}
 	/**
 	 * insertion in Ferias
@@ -143,17 +113,7 @@ class Empregado{
 			$database->insert("Ferias", $insertFerias);	
 		//evaluation of possible error and return of function
 		$e = $database->error();
-		if($e[1] == null){
-			$database->pdo->commit();
-			$retorno["status"] = "ok";
-			$retorno["resposta"] = true; 
-			return $retorno;
-		} else {
-			$database->pdo->rollBack();
-			$retorno["status"] = "erro";
-			$retorno["resposta"] = $e; 
-			return $retorno;
-		}
+		return Retorno::MedooErrorTest($e, true);
 	}
 	/**
 	 * /salary altering
@@ -165,17 +125,7 @@ class Empregado{
 			$database->insert("Salario", $insertSalario);	
 		//evaluation of possible error and return of function
 		$e = $database->error();
-		if($e[1] == null){
-			$database->pdo->commit();
-			$retorno["status"] = "ok";
-			$retorno["resposta"] = true; 
-			return $retorno;
-		} else {
-			$database->pdo->rollBack();
-			$retorno["status"] = "erro";
-			$retorno["resposta"] = $e; 
-			return $retorno;
-		}
+		return Retorno::MedooErrorTest($e, true);
 	}
 	/**
 	 * altering office
@@ -187,17 +137,7 @@ class Empregado{
 			$database->insert("Cargo", $insertCargo);
 		//evaluation of possible error and return of function
 		$e = $database->error();
-		if($e[1] == null){
-			$database->pdo->commit();
-			$retorno["status"] = "ok";
-			$retorno["resposta"] = true; 
-			return $retorno;
-		} else {
-			$database->pdo->rollBack();
-			$retorno["status"] = "erro";
-			$retorno["resposta"] = $e; 
-			return $retorno;
-		}	
+		return Retorno::MedooErrorTest($e, true);
 	}
 	/**
 	 * add contribution fiscal 
@@ -209,17 +149,7 @@ class Empregado{
 			$database->insert("ContribSindical", $insertContribSindical);
 		//evaluation of possible error and return of function
 		$e = $database->error();
-		if($e[1] == null){
-			$database->pdo->commit();
-			$retorno["status"] = "ok";
-			$retorno["resposta"] = true; 
-			return $retorno;
-		} else {
-			$database->pdo->rollBack();
-			$retorno["status"] = "erro";
-			$retorno["resposta"] = $e; 
-			return $retorno;
-		}	
+		return Retorno::MedooErrorTest($e, true);
 	}
 	/**
 	 * add accident or disease professional
@@ -231,17 +161,7 @@ class Empregado{
 			$database->insert("ADP", $insertADP);
 		//evaluation of possible error and return of function
 		$e = $database->error();
-		if($e[1] == null){
-			$database->pdo->commit();
-			$retorno["status"] = "ok";
-			$retorno["resposta"] = true; 
-			return $retorno;
-		} else {
-			$database->pdo->rollBack();
-			$retorno["status"] = "erro";
-			$retorno["resposta"] = $e; 
-			return $retorno;
-		}
+		return Retorno::MedooErrorTest($e, true);
 	}
 	/**
 	 * return all data of employee
@@ -263,17 +183,7 @@ class Empregado{
 			$data["Ferias"] = $database->select("Ferias", "*", ["idRegistro" => $idRegistro]);
 		//evaluation of possible error and return of function
 		$e = $database->error();
-		if($e[1] == null){
-			$database->pdo->commit();
-			$retorno["status"] = "ok";
-			$retorno["resposta"] = $data; 
-			return $retorno;
-		} else {
-			$database->pdo->rollBack();
-			$retorno["status"] = "erro";
-			$retorno["resposta"] = $e; 
-			return $retorno;
-		}
+		return Retorno::MedooErrorTest($e, $data);
 	}
 }
 ?>
