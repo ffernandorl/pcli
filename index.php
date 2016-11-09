@@ -57,7 +57,10 @@ function IndexController($request, $database){
 			return $livro->DadosLivro($database);
 			break;
 		case "livro.EL":
-			return $livro->EncerraLivro($database, $request["data"][0]);
+			return $livro->EncerraLivro($database, $request["data"]);
+			break;
+		case "livro.TDE":
+			return $livro->TermoDeEncerramento($database, $request["data"]);
 			break;
 		case "empresa.DE":
 			return $empresa->DadosEmpresa($database);

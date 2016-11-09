@@ -76,9 +76,9 @@ class Livro {
 		return Retorno::MedooErrorTest($e, $data);
 	}
 	/**
-	 * close the book
+	 * Add new 'TermoDeEncerramento' and close the book
 	 * @return array array of response
-	 * @param resource string $database $livro
+	 * @param resource array $database $data
 	 */
 	public function EncerraLivro($database, $data){
 		$database->insert("TermoDeEncerramento", 
@@ -97,6 +97,16 @@ class Livro {
 		//evaluation of possible error and return of function
 		$e = $database->error();
 		return Retorno::MedooErrorTest($e, true);
+	}
+	/**
+	 * Return data from the table 'TermoDeEncerramento' by 'idLivro'
+	 * @return array array of response
+	 * @param resource string $database $livro
+	 */
+	public function TermoDeEncerramento($database, $livro){
+		$data = $database->select("TermoDeEncerramento", "*", ["numLivro" => $livro]):
+		$e = $database->error();
+		return Retorno::MedooErrorTest($e, $data);
 	}
 }
 ?>
