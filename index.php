@@ -57,14 +57,14 @@ function IndexController($request, $database){
 			return $livro->DadosLivro($database);
 			break;
 		case "livro.EL":
-			return $livro->EncerraLivro($database, $request["data"]);
+			return $livro->EncerraLivro($database, $request["data"][0]);
 			break;
 		case "empresa.DE":
 			return $empresa->DadosEmpresa($database);
 			break;	
 		default:
 			$retorno["status"] = "400";
-			$retorno["resposta"] = "request not found"; 
+			$retorno["data"] = "request not found"; 
 			return $retorno;
 			break;
 	}
@@ -79,44 +79,14 @@ function IndexController($request, $database){
 			echo $request;
 		}else {
 			$err["status"] = "507";
-			$err["resposta"] = "parsing error from Server JSON";
+			$err["data"] = "parsing error from Server JSON";
 			echo json_encode($err);
 		}
 	} else {
 		$err["status"] = "506";
-		$err["resposta"] = "parsing error from Client JSON";
+		$err["data"] = "parsing error from Client JSON";
 		echo json_encode($err);
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-$j = '{"method":"livro.IL","data":[{"numLivro":null,"numFolhas":"50","drtLocal":"123456789","livroAnterior":"1","data":"2016-10-02","assinaturaEmpregador":"jose","status":"1","numEmpregados":"3"}]}';
-$request = json_decode($j, true);
-//var_dump($request);
-$request = json_encode(IndexController($request,$database));
-var_dump($request);
-*/
 ?>

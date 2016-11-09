@@ -80,11 +80,19 @@ class Livro {
 	 * @return array array of response
 	 * @param resource string $database $livro
 	 */
-	public function EncerraLivro($database, $livro){
+	public function EncerraLivro($database, $data){
+		$database->insert("TermoDeEncerramento", 
+				[
+				"idTE" => null,
+				"data" => $data["data"],
+				"numLivro" => $data["numLivro"],
+				"cidade" => "Parnaíba"
+				]
+			);
 		$database->update(
 			"Livro",
 			["status" => "f"],
-			["numLivro" => $livro]
+			["numLivro" => $data["numLivro"]]
 			);
 		//evaluation of possible error and return of function
 		$e = $database->error();
