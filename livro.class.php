@@ -104,7 +104,7 @@ class Livro {
 	 * @param resource string $database $livro
 	 */
 	public function TermoDeEncerramento($database, $livro){
-		$data = $database->select("TermoDeEncerramento", "*", ["numLivro" => $livro]):
+		$data = $database->select("TermoDeEncerramento", "*", ["numLivro" => $livro]);
 		$e = $database->error();
 		return Retorno::MedooErrorTest($e, $data);
 	}
