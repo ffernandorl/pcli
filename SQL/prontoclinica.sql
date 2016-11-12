@@ -22,21 +22,12 @@ CREATE TABLE Livro(
 	numFolhas int(11),
 	drtLocal varchar(50),
 	livroAnterior int(11),
-	data date,
+	dataAbertura date,
+	dataEncerramento date,
 	assinaturaEmpregador varchar(50),
 	status char(1),
 	numEmpregados int(11) NOT NULL,
 	PRIMARY KEY (numLivro)
-) ENGINE=InnoDB;
-
-CREATE TABLE TermoDeEncerramento (
-	idTE int(11) AUTO_INCREMENT,
-	data date,
-	numLivro int(11),
-	cidade varchar(30),
-	assinaturaEmpregador varchar(50),
-	PRIMARY KEY (idTE),
-	FOREIGN KEY (numLivro) REFERENCES Livro (numLivro)
 ) ENGINE=InnoDB;
 
 -- REGISTRO DE EMPREGAODS --
@@ -215,7 +206,7 @@ CREATE TABLE Login (
 -- insercoes de dados --
 
 insert into Empresa values ("Prontoclinica", "Rua das Abobrinhas", "2030", "Parnaíba", "Piauí", "Odontologia", "123456", "123456789", 9876543210 );
-insert into Livro values (NULL , 50, "123456789", NULL, "2016/10/02", "jose", "a", 3);
+insert into Livro values (NULL , 50, "123456789", NULL, "2016/10/02", "jose", "a", 1);
 insert into RegistroEmpregado values (NULL, "2", "1", "2016/10/02", "Parnaíba", "jose", NULL, NULL, NULL, NULL, "josezinho" );
 insert into CaracFisicas values (NULL, 1, "azul", "longo", "vesgo", "1,72", "65kg", "de transito");
 insert into Contrato values (NULL, 1, "senhor das neves", "123456789", "1234", NULL, NULL, "123456789", "1234567890", "20523", "1234567", "2016/12/08", "consultor", "10", "dez", "mensal", "08:00", "16:00", "01:00" );
