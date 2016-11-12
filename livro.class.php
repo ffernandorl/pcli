@@ -81,6 +81,11 @@ class Livro {
 	 * @param resource array $database $data
 	 */
 	public function EncerraLivro($database, $data){
+		if (!(preg_match("/\d{4}\-\d{2}-\d{2}/",$insertLivro["data"])) || is_numeric($insertLivro["numLivro"])){
+			$retorno["status"] = "506";
+			$retorno["data"] = "parsing error from Client JSON";
+			echo json_encode($retorno);
+		}
 		$database->update(
 			"Livro",
 			["status" => "f", "dataEncerramento" => $data["dataEncerramento"]],

@@ -81,14 +81,14 @@ function IndexController($request, $database){
 		if (json_last_error() == 0){ 
 			echo $request;
 		}else {
-			$err["status"] = "507";
-			$err["data"] = "parsing error from Server JSON";
-			echo json_encode($err);
+			$retorno["status"] = "507";
+			$retorno["data"] = "parsing error from Server JSON";
+			echo json_encode($retorno);
 		}
 	} else {
-		$err["status"] = "506";
-		$err["data"] = "parsing error from Client JSON";
-		echo json_encode($err);
+		$retorno["status"] = "506";
+		$retorno["data"] = "parsing error from Client JSON";
+		echo json_encode($retorno);
 	}
 
 
