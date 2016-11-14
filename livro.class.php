@@ -36,8 +36,8 @@ class Livro {
 	 */
 	public function InserirLivro($database, $insertLivro){
 		//JSON Validation
-		$v = Retorno::ValidationJson($this->ValidaJson($database, $insertLivro));
-		if ($v) return $v;	
+		//$v = Retorno::ValidationJson($this->ValidaJson($database, $insertLivro));
+		//if ($v) return $v;	
 		//Insertion in Database
 		$database->pdo->beginTransaction(); //begining a Transaction
 			$database->insert("Livro",$insertLivro); //Insertion

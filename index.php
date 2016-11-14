@@ -48,7 +48,7 @@ function IndexController($request, $database){
 			return $empregado->RetornaEmpregado($database, $request["data"]);
 			break;
 		case "livro.IL":
-			return $livro->InserirLivro($database, $request["data"][0]);
+			return $livro->InserirLivro($database, $request["data"]);
 			break;
 		case "livro.REPL":
 			return $livro->RelacaoEmpregPorLivro($database);

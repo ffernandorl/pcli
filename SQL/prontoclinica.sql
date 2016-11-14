@@ -1,5 +1,5 @@
 CREATE DATABASE prontoclinica;
-
+ 
 USE prontoclinica;
 
 -- TABELAS --
