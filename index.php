@@ -91,5 +91,4 @@ function IndexController($request, $database){
 		echo json_encode($retorno);
 	}
 
-
 ?>

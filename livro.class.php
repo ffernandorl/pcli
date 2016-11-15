@@ -1,5 +1,5 @@
 <?php
-/**
+/** 
 * @author Francisco Fernando
 * @copyright 2016 LATECS
 */
@@ -39,10 +39,10 @@ class Livro {
 		//$v = Retorno::ValidationJson($this->ValidaJson($database, $insertLivro));
 		//if ($v) return $v;	
 		//Insertion in Database
-		$database->pdo->beginTransaction(); //begining a Transaction
 			$database->insert("Livro",$insertLivro); //Insertion
 		//evaluation of possible error and return of function
 		$e = $database->error();
+		var_dump($e);
 		return Retorno::MedooErrorTest($e, true);
 	}
 	/**
