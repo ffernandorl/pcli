@@ -42,7 +42,6 @@ class Livro {
 			$database->insert("Livro",$insertLivro); //Insertion
 		//evaluation of possible error and return of function
 		$e = $database->error();
-		var_dump($e);
 		return Retorno::MedooErrorTest($e, true);
 	}
 	/**
